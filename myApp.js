@@ -39,7 +39,12 @@ var tzvi = new Person({
   favoriteFoods: ["pizza", "ice cream"]
 });
 
+tzvi.save(function(err, data) {
+  err ? console.log(err) : console.log(data);
+});
+
 console.log(tzvi.name);
+
 // First of all we need a **Schema**. Each schema maps to a MongoDB collection
 // and defines the shape of the documents within that collection. Schemas are
 // building block for Models. They can be nested to create complex models,
@@ -111,8 +116,27 @@ var createAndSavePerson = function(done) {
 // 'arrayOfPeople'.
 
 var createManyPeople = function(arrayOfPeople, done) {
-  done(null /*, data*/);
+  Person.create(arrayOfPeople);
+  // done(null /*, data*/);
 };
+
+createManyPeople([
+  {
+    name: "tzvi",
+    age: 23,
+    favoriteFoods: ["cholent", "cookies"]
+  },
+  {
+    name: "raizel",
+    age: 37,
+    favoriteFoods: ["pizza", "cake"]
+  },
+  {
+    name: "sam",
+    age: 98,
+    favoriteFoods: ["anchovies", "ice cream"]
+  }
+]);
 
 /** # C[R]UD part II - READ #
 /*  ========================= */
@@ -126,9 +150,13 @@ var createManyPeople = function(arrayOfPeople, done) {
 // Use the function argument `personName` as search key.
 
 var findPeopleByName = function(personName, done) {
-  done(null /*, data*/);
+  // done(null /*, data*/);
+  // Person.find(personName, function(err, docs) {
+  //   err ? console.log(err) : console.log(docs);
+  // });
 };
 
+// findPeopleByName({ name: "tzvi" });
 /** 6) Use `Model.findOne()` */
 
 // `Model.findOne()` behaves like `.find()`, but it returns **only one**
@@ -139,9 +167,15 @@ var findPeopleByName = function(personName, done) {
 // argument `food` as search key
 
 var findOneByFood = function(food, done) {
-  done(null /*, data*/);
+  // done(null /*, data*/);
+  // Person.findOne(food, function(err, doc) {
+  //   err
+  //     ? console.log(err)
+  //     : console.log(`here are the ${food.favoriteFoods} ${doc} the end`);
+  // });
 };
 
+// findOneByFood({ favoriteFoods: "pizza" });
 /** 7) Use `Model.findById()` */
 
 // When saving a document, mongodb automatically add the field `_id`,
@@ -152,8 +186,12 @@ var findOneByFood = function(food, done) {
 // Use the function argument 'personId' as search key.
 
 var findPersonById = function(personId, done) {
-  done(null /*, data*/);
+  // Person.findById(personId, function(err, data) {
+  //   err ? console.log(err) : console.log(`here are the ${data} the end`);
+  // });
+  // // done(null /*, data*/);
 };
+// findPersonById("5d6f1add2275c95edce8fc6a");
 
 /** # CR[U]D part III - UPDATE # 
 /*  ============================ */
@@ -180,11 +218,16 @@ var findPersonById = function(personId, done) {
 // manually mark it as edited using `document.markModified('edited-field')`
 // (http://mongoosejs.com/docs/schematypes.html - #Mixed )
 
-var findEditThenSave = function(personId, done) {
-  var foodToAdd = "hamburger";
-
-  done(null /*, data*/);
+var findEditThenSave = function(personId) {
+  // var foodToAdd = "hamburger";
+  // Person.findById(personId, function(err, data) {
+  //   err ? console.log(err) : console.log(data + "here is the hamburger eater");
+  //   data.favoriteFoods.push(foodToAdd);
+  //   data.save();
+  // });
 };
+
+// findEditThenSave("5d6f1add2275c95edce8fc6a");
 
 /** 9) New Update : Use `findOneAndUpdate()` */
 
@@ -202,10 +245,14 @@ var findEditThenSave = function(personId, done) {
 // passes the unmodified object to its callback.
 
 var findAndUpdate = function(personName, done) {
-  var ageToSet = 20;
-
-  done(null /*, data*/);
+  // var ageToSet = 20;
+  // Person.findOneAndUpdate(personName, {age: ageToSet}, {new: true}, function(err, data) {
+  //   err ? console.log(err) : console.log(data + "here is the age to change");
+  // });
+  // done(null /*, data*/);
 };
+
+// findAndUpdate({name: "tzvi"})
 
 /** # CRU[D] part IV - DELETE #
 /*  =========================== */
@@ -218,9 +265,18 @@ var findAndUpdate = function(personName, done) {
 // As usual, use the function argument `personId` as search key.
 
 var removeById = function(personId, done) {
-  done(null /*, data*/);
+  // try {
+  //   Person.findByIdAndRemove(personId, function(err, data){
+  //     err ? console.log(err) : console.log(data + "item has been deleted")
+  //   })
+  // } catch{
+  //   console.log("failed")
+  // } finally {
+  //   console.log("failed")
+  // }
+  // done(null /*, data*/);
 };
-
+// removeById("5d6ef0358bf2d4419c6f8f1d")
 /** 11) Delete many People */
 
 // `Model.remove()` is useful to delete all the documents matching given criteria.
@@ -232,11 +288,14 @@ var removeById = function(personId, done) {
 // Don't forget to pass it to the `done()` callback, since we use it in tests.
 
 var removeManyPeople = function(done) {
-  var nameToRemove = "Mary";
-
-  done(null /*, data*/);
+  // var nameToRemove = "tzvi";
+  // Person.remove({name: nameToRemove}, function(err, data){
+  //   console.log(data + "item has been deleted")
+  // })
+  // done(null /*, data*/);
 };
 
+// removeManyPeople()
 /** # C[R]UD part V -  More about Queries # 
 /*  ======================================= */
 
@@ -256,10 +315,18 @@ var removeManyPeople = function(done) {
 // passing the `done(err, data)` callback to it.
 
 var queryChain = function(done) {
-  var foodToSearch = "burrito";
-
-  done(null /*, data*/);
+  var foodToSearch = "pizza";
+  Person.find({ favoriteFoods: foodToSearch })
+    .sort({ name: "asc" })
+    .limit(3)
+    .select("-age")
+    .exec(function(err, data) {
+      console.log("starts" + data + "ends");
+    });
+  // done(null /*, data*/);
 };
+
+queryChain();
 
 /** **Well Done !!**
 /* You completed these challenges, let's go celebrate !
